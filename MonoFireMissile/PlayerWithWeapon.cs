@@ -78,7 +78,7 @@ namespace AnimatedSprite
             if (MyProjectile != null)
             {
                 // fire the rocket and it looks for the target
-                if(Keyboard.GetState().IsKeyDown(Keys.Space))
+                if(Keyboard.GetState().IsKeyDown(Keys.Space) && MyProjectile.ProjectileState == Projectile.PROJECTILE_STATE.STILL)
                     MyProjectile.fire(Site.position);
             }
 

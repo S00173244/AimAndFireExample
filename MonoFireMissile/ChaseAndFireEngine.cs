@@ -19,6 +19,8 @@ namespace Engines
         SpriteBatch spriteBatch;
         private CircularChasingEnemy[] chasers;
         private Game _gameOwnedBy;
+        private Sentry turret;
+        private GameTime gameTime;
 
         public ChaseAndFireEngine(Game game)
             {
@@ -50,6 +52,9 @@ namespace Engines
                     chasers[i].position = new Vector2(Utility.NextRandom(game.GraphicsDevice.Viewport.Width - chasers[i].spriteWidth),
                             Utility.NextRandom(game.GraphicsDevice.Viewport.Height - chasers[i].spriteHeight));
                 }
+
+            turret = new Sentry(game, game.Content.Load<Texture2D>(@"Textures/CrossBow"), new Vector2(200, 500), 1,p);
+           
                 
             }
 
@@ -65,6 +70,8 @@ namespace Engines
                 chaser.follow(p);
                 chaser.Update(gameTime);
             }
+
+            turret.Update(gameTime);
             
             
         }
