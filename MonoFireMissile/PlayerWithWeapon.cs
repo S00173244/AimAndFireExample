@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using MonoFireMissile;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,8 +13,13 @@ namespace AnimatedSprite
         {
             protected Game myGame;
             protected float playerVelocity = 6.0f;
-        private Projectile myProjectile;
-        protected CrossHair Site;
+            private Projectile myProjectile;
+            protected CrossHair Site;
+            private HealthRect healthBar;
+            protected enum PLAYER_STATUS { Alive,Dead}
+            private 
+            
+            PLAYER_STATUS playerAlive = PLAYER_STATUS.Alive;
 
             public Vector2 CentrePos
             {
@@ -39,9 +44,14 @@ namespace AnimatedSprite
             {
                 myGame = g;
                 Site = new CrossHair(g, g.Content.Load<Texture2D>(@"Textures\CrossHair"), userPosition, 1);
-                
+          
+
             }
 
+        public void AddHealthBar(HealthRect h)
+        {
+            healthBar = h;
+        }
             public void loadProjectile(Projectile r)
             {
                 MyProjectile = r;
@@ -50,7 +60,10 @@ namespace AnimatedSprite
 
         public override void Update(GameTime gameTime)
         {
-           
+            healthBar.UpdateHealthbarPos(bound.Location.ToVector2());
+            Console.WriteLine(healthBar.HealthRectangle);
+            Console.WriteLine(healthBar.position);
+            UpdatePlayerStatus();
             Viewport gameScreen = myGame.GraphicsDevice.Viewport;
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
@@ -105,7 +118,14 @@ namespace AnimatedSprite
             Site.Draw(spriteBatch);
             if (MyProjectile != null && MyProjectile.ProjectileState != Projectile.PROJECTILE_STATE.STILL)
                     MyProjectile.Draw(spriteBatch);
-            
+            // 
+            healthBar.DrawHealth(spriteBatch);
+        }
+
+        public void UpdatePlayerStatus()
+        {
+            if (healthBar.Health >0) playerAlive = PLAYER_STATUS.Alive;
+            else playerAlive = PLAYER_STATUS.Dead;
         }
 
     }

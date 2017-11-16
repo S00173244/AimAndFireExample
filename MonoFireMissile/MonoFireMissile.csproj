@@ -47,6 +47,7 @@
     <Compile Include="CrossHair.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="HealthRect.cs" />
     <Compile Include="PlayerWithWeapon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using AnimatedSprite;
 using Utilities;
-
+using MonoFireMissile;
 namespace Engines
 {
     class ChaseAndFireEngine
@@ -21,6 +21,7 @@ namespace Engines
         private Game _gameOwnedBy;
         private Sentry turret;
         private GameTime gameTime;
+        
 
         public ChaseAndFireEngine(Game game)
             {
@@ -40,6 +41,8 @@ namespace Engines
                                         new Sprite(game, game.Content.Load<Texture2D>(@"Textures/explosion_strip8"), p.position, 8)
                                         , p.position, 4));
 
+            p.AddHealthBar(new HealthRect(game.GraphicsDevice, p.position,100));
+
             chasers = new CircularChasingEnemy[Utility.NextRandom(2,5)];
 
             for (int i = 0; i < chasers.Count(); i++)
@@ -53,10 +56,13 @@ namespace Engines
                             Utility.NextRandom(game.GraphicsDevice.Viewport.Height - chasers[i].spriteHeight));
                 }
 
-            turret = new Sentry(game, game.Content.Load<Texture2D>(@"Textures/CrossBow"), new Vector2(200, 500), 1,p);
+            turret = new Sentry(game, game.Content.Load<Texture2D>(@"Textures/CrossBow"), new Vector2(game.GraphicsDevice.Viewport.Width-100, game.GraphicsDevice.Viewport.Height-200), 1);
+            turret.loadProjectile(new Projectile(game, game.Content.Load<Texture2D>(@"Textures/Arrow"), new Sprite(game, game.Content.Load<Texture2D>(@"Textures/explosion_strip8"), p.position, 8), turret.position, 1));
+            
+
+
            
-                
-            }
+        }
 
 
         public void Update(GameTime gameTime)
@@ -71,6 +77,22 @@ namespace Engines
                 chaser.Update(gameTime);
             }
 
+
+            if (turret.IsReadyToFire())
+            {
+                if (turret.IsPlayerInShootingArea(p))
+                {
+
+                    turret.FaceThePlayer(p);
+                    turret.FireArrow(p);
+
+                }
+            }
+            else
+            {
+                turret.FaceThePlayer(p);
+                turret.ReloadArrow(gameTime);
+            }
             turret.Update(gameTime);
             
             
@@ -85,6 +107,7 @@ namespace Engines
             p.Draw(spriteBatch);
             foreach (CircularChasingEnemy chaser in chasers)
                 chaser.Draw(spriteBatch);
+            turret.Draw(spriteBatch);
         }
 
 

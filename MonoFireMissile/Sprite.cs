@@ -18,6 +18,8 @@ namespace AnimatedSprite
         protected Vector2 origin;
         protected float angleOfRotation;
         protected int spriteDepth = 1;
+        protected Vector2 topleft { get { return position - new Vector2(spriteWidth/2, spriteHeight/2); } }
+        protected Rectangle bound { get { return new Rectangle((int)this.position.X - this.spriteWidth/2, (int)this.position.Y - this.spriteHeight/2 -10, this.spriteWidth, this.spriteHeight); } }
         protected Vector2 WorldOrigin
         {
             get { return position + origin; }

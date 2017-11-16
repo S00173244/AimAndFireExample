@@ -19,6 +19,8 @@ namespace MonoFireMissile
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 780;
         }
 
         /// <summary>
